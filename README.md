@@ -60,7 +60,7 @@ python scripts\preview_page.py square-pharma_2025 show 82   # view one page
 ## Roadmap
 
 - [x] PDF text and table-row extraction
-- [ ] Chunking with section and page metadata
+- [x] Chunking with section and page metadata
 - [ ] Embeddings and vector store
 - [ ] Hybrid retrieval (BM25 + vectors)
 - [ ] Cited answers with a "not found" fallback

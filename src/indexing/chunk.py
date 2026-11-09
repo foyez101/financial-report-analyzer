@@ -7,6 +7,8 @@ Usage (from the project root):
 import json
 import re
 import sys
+import unicodedata
+from collections import Counter
 from pathlib import Path
 
 PROCESSED = Path("data/processed")
@@ -44,6 +46,45 @@ def detect_section(lines: list[str]) -> str | None:
             if keyword in low:
                 return label
     return None
+
+MARKER = "[total/subtotal, no label in source]"
+WORD = re.compile(r"[A-Za-z]{4,}")
+SCOPE_KEYWORDS = [
+    ("off-shore", "off-shore units"),
+    ("offshore", "off-shore units"),
+    ("consolidated", "consolidated"),
+    ("subsidiary", "subsidiary"),
+    ("separate", "separate"),
+]
+
+
+def detect_scope(lines: list[str]) -> str | None:
+    """Tell consolidated / separate / subsidiary statements apart (a hint only)."""
+    for line in lines[:12]:
+        low = line.lower()
+        for keyword, label in SCOPE_KEYWORDS:
+            if keyword in low:
+                return label
+    return None
+
+
+def running_lines(report: dict) -> set[str]:
+    """Lines repeated on most pages (running headers); they carry no information."""
+    counts: Counter = Counter()
+    for page in report["pages"]:
+        seen = {
+            unicodedata.normalize("NFKC", l).strip()
+            for l in page["layout_text"].splitlines()
+            if l.strip()
+        }
+        counts.update(seen)
+    limit = 0.5 * len(report["pages"])
+    return {line for line, n in counts.items() if n >= limit and len(line) < 150}
+
+
+def is_fragment(body: str) -> bool:
+    """True for chunks with almost no real words (chart labels, stray numbers)."""
+    return len(WORD.findall(body.replace(MARKER, ""))) < 8
 
 
 def split_halves(page: dict) -> list[tuple[str | None, str]]:
@@ -99,19 +140,30 @@ def pack(lines: list[str], table_like: bool) -> list[list[str]]:
 def build_chunks(report: dict, stem: str) -> list[dict]:
     company, year = report["company"], report["year"]
     display = company.replace("-", " ").title()
+    repeated = running_lines(report)
     chunks = []
     for page in report["pages"]:
         for side, text in split_halves(page):
-            lines = [mark_unlabelled(l) for l in text.splitlines() if l.strip()]
+            raw = [
+                unicodedata.normalize("NFKC", l).strip()
+                for l in text.splitlines()
+                if l.strip()
+            ]
+            if not raw:
+                continue
+            section = detect_section(raw)
+            scope = detect_scope(raw)
+            lines = [mark_unlabelled(l) for l in raw if l not in repeated]
             if not lines:
                 continue
-            section = detect_section(lines)
             table_like = is_table_like(lines)
             where = f"page {page['page']}" + (f" ({side})" if side else "")
-            label = f"{display} | {year} | {where}" + (f" | {section}" if section else "")
+            label = f"{display} | {year} | {where}" + "".join(
+                f" | {x}" for x in (scope, section) if x
+            )
             for n, piece in enumerate(pack(lines, table_like), start=1):
                 body = "\n".join(piece)
-                if len(body) < MIN_CHARS:
+                if len(body) < MIN_CHARS or is_fragment(body):
                     continue
                 suffix = f"-{side[0].upper()}" if side else ""
                 chunks.append(
@@ -123,6 +175,7 @@ def build_chunks(report: dict, stem: str) -> list[dict]:
                         "page": page["page"],
                         "side": side,
                         "section": section,
+                        "scope": scope,
                         "table_like": table_like,
                         "text": f"{label}\n{body}",
                     }

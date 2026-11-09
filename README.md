@@ -32,6 +32,23 @@ Question -> retrieve (hybrid) -> LLM answer with page citations
 - Automatic detection and splitting of two-page spreads.
 - A script that flags scanned (no-text) PDFs.
 
+## Retrieval results (pilot)
+
+Does the correct figure appear in the top-k retrieved chunks? Pilot set of 8
+questions over two reports (Square Pharma 2025, BRAC Bank 2024). Small sample;
+a larger set is planned.
+
+| Metric | Vector only | Keyword (BM25) | Hybrid (RRF) |
+|---|---|---|---|
+| hit@1 | 25% | 25% | 38% |
+| hit@5 | 62% | 88% | 88% |
+| hit@10 | 75% | 100% | 100% |
+| MRR | 0.399 | 0.494 | 0.591 |
+
+Findings: vector search alone misses short line items inside long tables (for
+example "Trade Payables"); BM25 finds exact labels; fusing the two gives the best
+average rank.
+
 ## Setup
 
 ```powershell
@@ -61,8 +78,8 @@ python scripts\preview_page.py square-pharma_2025 show 82   # view one page
 
 - [x] PDF text and table-row extraction
 - [x] Chunking with section and page metadata
-- [ ] Embeddings and vector store
-- [ ] Hybrid retrieval (BM25 + vectors)
+- [x] Embeddings and vector store
+- [x] Hybrid retrieval (BM25 + vectors)
 - [ ] Cited answers with a "not found" fallback
 - [ ] Evaluation set and results
 - [ ] Web demo

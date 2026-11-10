@@ -54,6 +54,7 @@ SCOPE_KEYWORDS = [
     ("offshore", "off-shore units"),
     ("consolidated", "consolidated"),
     ("subsidiary", "subsidiary"),
+    ("standalone", "separate"),
     ("separate", "separate"),
 ]
 

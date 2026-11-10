@@ -53,6 +53,13 @@ def layout_lines(page: pymupdf.Page, clip: pymupdf.Rect | None = None) -> list[s
     lines = []
     for _, row in rows:
         row.sort(key=lambda w: w[0])
+        # fake bold: the same word printed twice, slightly offset; keep one copy
+        deduped = []
+        for word in row:
+            if deduped and word[4] == deduped[-1][4] and word[0] < deduped[-1][2]:
+                continue
+            deduped.append(word)
+        row = deduped
         parts = [row[0][4]]
         for prev, word in zip(row, row[1:]):
             gap = word[0] - prev[2]

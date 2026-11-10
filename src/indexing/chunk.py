@@ -69,7 +69,7 @@ def detect_scope(lines: list[str]) -> str | None:
 
 
 def running_lines(report: dict) -> set[str]:
-    """Lines repeated on most pages (running headers); they carry no information."""
+    """Lines repeated across pages that carry no information (page furniture)."""
     counts: Counter = Counter()
     for page in report["pages"]:
         seen = {
@@ -78,9 +78,21 @@ def running_lines(report: dict) -> set[str]:
             if l.strip()
         }
         counts.update(seen)
-    limit = 0.5 * len(report["pages"])
-    return {line for line, n in counts.items() if n >= limit and len(line) < 150}
-
+    pages = len(report["pages"])
+    repeated = set()
+    for line, n in counts.items():
+        if len(line) >= 150:
+            continue
+        on_half_the_pages = n >= 0.5 * pages
+        # a navigation bar: many columns, no figures, on a fair share of pages
+        navigation_bar = (
+            n >= max(5, 0.05 * pages)
+            and line.count(" | ") >= 3
+            and not any(ch.isdigit() for ch in line)
+        )
+        if on_half_the_pages or navigation_bar:
+            repeated.add(line)
+    return repeated
 
 def is_fragment(body: str) -> bool:
     """True for chunks with almost no real words (chart labels, stray numbers)."""

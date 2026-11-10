@@ -4,3 +4,5 @@ pandas
 sentence-transformers
 chromadb
 rank-bm25
+google-genai
+python-dotenv

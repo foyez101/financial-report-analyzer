@@ -226,6 +226,7 @@ def show(stem: str, page: int) -> None:
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     args = sys.argv[1:]
     if not args:
         build_all()

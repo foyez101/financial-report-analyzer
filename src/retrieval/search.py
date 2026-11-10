@@ -1,8 +1,8 @@
-"""Search the index with vector, keyword (BM25), or hybrid retrieval.
+"""Search the index with vector, keyword (BM25), hybrid, or reranked retrieval.
 
 Usage (from the project root):
   python -m src.retrieval.search "total assets" --company square-pharma --year 2025
-  python -m src.retrieval.search "total assets" --company square-pharma --mode vector
+  python -m src.retrieval.search "net profit" --company grameenphone --mode rerank
 """
 import argparse
 import json
@@ -12,14 +12,16 @@ from pathlib import Path
 
 import chromadb
 from rank_bm25 import BM25Okapi
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 DB_DIR = "chroma_db"
 COLLECTION = "reports"
 CHUNKS_FILE = Path("data/processed/chunks.jsonl")
 MODEL_NAME = "BAAI/bge-small-en-v1.5"
+RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 CANDIDATES = 50  # results each retriever contributes before fusion
+RERANK_POOL = 30  # hybrid results the reranker rescores
 RRF_K = 60  # standard constant for reciprocal rank fusion
 STOPWORDS = {
     "what", "was", "were", "is", "are", "the", "of", "in", "at", "as",
@@ -35,6 +37,11 @@ def tokenize(text: str) -> list[str]:
 @lru_cache(maxsize=1)
 def get_model() -> SentenceTransformer:
     return SentenceTransformer(MODEL_NAME)
+
+
+@lru_cache(maxsize=1)
+def get_reranker() -> CrossEncoder:
+    return CrossEncoder(RERANK_MODEL, max_length=512)
 
 
 @lru_cache(maxsize=1)
@@ -75,14 +82,15 @@ def keyword_results(query, company, year, n):
 
 
 def search(query, k=5, company=None, year=None, mode="hybrid"):
-    """Return the top-k chunks. mode: 'vector', 'keyword' or 'hybrid'."""
+    """Return the top-k chunks. mode: 'vector', 'keyword', 'hybrid' or 'rerank'."""
+    base = "hybrid" if mode == "rerank" else mode
     docs: dict[str, str] = {}
     rankings = []
-    if mode in ("vector", "hybrid"):
+    if base in ("vector", "hybrid"):
         ids, found = vector_results(query, company, year, CANDIDATES)
         rankings.append(ids)
         docs.update(found)
-    if mode in ("keyword", "hybrid"):
+    if base in ("keyword", "hybrid"):
         ids, found = keyword_results(query, company, year, CANDIDATES)
         rankings.append(ids)
         docs.update(found)
@@ -91,7 +99,15 @@ def search(query, k=5, company=None, year=None, mode="hybrid"):
     for ids in rankings:
         for rank, cid in enumerate(ids, start=1):
             scores[cid] = scores.get(cid, 0.0) + 1.0 / (RRF_K + rank)
-    top = sorted(scores, key=scores.get, reverse=True)[:k]
+    pool = RERANK_POOL if mode == "rerank" else k
+    top = sorted(scores, key=scores.get, reverse=True)[:pool]
+
+    if mode == "rerank" and top:
+        rerank_scores = get_reranker().predict([(query, docs[c]) for c in top])
+        ranked = sorted(zip(top, rerank_scores), key=lambda x: x[1], reverse=True)[:k]
+        top = [c for c, _ in ranked]
+        scores = {c: float(s) for c, s in ranked}
+
     return {
         "ids": [top],
         "documents": [[docs[c] for c in top]],
@@ -105,7 +121,9 @@ def main() -> None:
     parser.add_argument("--company")
     parser.add_argument("--year", type=int)
     parser.add_argument("-k", type=int, default=5)
-    parser.add_argument("--mode", choices=["vector", "keyword", "hybrid"], default="hybrid")
+    parser.add_argument(
+        "--mode", choices=["vector", "keyword", "hybrid", "rerank"], default="hybrid"
+    )
     args = parser.parse_args()
 
     result = search(args.query, args.k, args.company, args.year, args.mode)

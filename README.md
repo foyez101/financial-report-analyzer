@@ -32,22 +32,40 @@ Question -> retrieve (hybrid) -> LLM answer with page citations
 - Automatic detection and splitting of two-page spreads.
 - A script that flags scanned (no-text) PDFs.
 
-## Retrieval results (pilot)
+## Retrieval results
 
-Does the correct figure appear in the top-k retrieved chunks? Pilot set of 8
-questions over two reports (Square Pharma 2025, BRAC Bank 2024). Small sample;
-a larger set is planned.
+Does a retrieved chunk contain the correct figure? 15 questions across all four
+reports, with answers checked by hand against the PDFs. A question may accept
+several forms of its answer (for example `29,576,544` thousand and `29.6 billion`),
+but only forms verified on a page of the same report. Small sample, so treat the
+numbers as indicative.
 
-| Metric | Vector only | Keyword (BM25) | Hybrid (RRF) |
-|---|---|---|---|
-| hit@1 | 25% | 25% | 38% |
-| hit@5 | 62% | 88% | 88% |
-| hit@10 | 75% | 100% | 100% |
-| MRR | 0.399 | 0.494 | 0.591 |
+| Metric | Vector | Keyword (BM25) | Hybrid (RRF) | Hybrid + reranker |
+|---|---|---|---|---|
+| hit@1 | 33% | 27% | **47%** | 33% |
+| hit@3 | 67% | 73% | 80% | **87%** |
+| hit@5 | 73% | **93%** | 87% | **93%** |
+| hit@10 | 80% | **100%** | **100%** | **100%** |
+| MRR | 0.513 | 0.547 | **0.660** | 0.572 |
 
-Findings: vector search alone misses short line items inside long tables (for
-example "Trade Payables"); BM25 finds exact labels; fusing the two gives the best
-average rank.
+Default: hybrid retrieval.
+
+What I learned:
+- Vector search alone misses short line items inside long tables (for example
+  trade payables or NAV per share); BM25 finds the exact labels. Fusing the two
+  gives the best average rank.
+- A general-purpose reranker (`ms-marco-MiniLM-L-6-v2`) moved more answers into the
+  top 3 but pushed correct statement tables down from rank 1. It was trained on web
+  prose, not financial tables, so it is kept as an option, not the default.
+- Some reports fake bold text by printing each word twice, and one prints two pages
+  side by side on each PDF page. Both broke retrieval until extraction handled them.
+- For "net profit" questions, narrative MD&A pages often outrank the income
+  statement. They state the correct rounded figure, so retrieval succeeds, but the
+  final answer should quote and cite the statement figure.
+- Each report contains similar-looking figures that are wrong answers to a plain
+  question (inflation-adjusted numbers, standalone vs consolidated, total
+  comprehensive income vs profit after tax). The test set includes questions that
+  check these.
 
 ## Setup
 

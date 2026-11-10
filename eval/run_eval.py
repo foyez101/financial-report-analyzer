@@ -10,12 +10,14 @@ from src.retrieval.search import search
 
 QUESTIONS = Path("eval/questions.json")
 KS = (1, 3, 5, 10)
-MODES = ("vector", "keyword", "hybrid")
+MODES = ("vector", "keyword", "hybrid", "rerank")
 
 
-def first_hit_rank(documents: list[str], answer: str) -> int | None:
+def first_hit_rank(documents: list[str], answer: str | list[str]) -> int | None:
+    """Rank of the first chunk containing any accepted form of the answer."""
+    answers = answer if isinstance(answer, list) else [answer]
     for rank, doc in enumerate(documents, start=1):
-        if answer in doc:
+        if any(a in doc for a in answers):
             return rank
     return None
 

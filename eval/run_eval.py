@@ -32,6 +32,7 @@ def evaluate(questions: list[dict], mode: str) -> list[int | None]:
 
 def main() -> None:
     questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
+    questions = [q for q in questions if q["answer"] is not None]
     results = {mode: evaluate(questions, mode) for mode in MODES}
 
     print(f"{'question id':<28}" + "".join(f"{m:>10}" for m in MODES))

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "sq25-total-assets",
+    "status": "PASS",
+    "answer": "As at 30 June 2025, Square Pharmaceuticals PLC.'s consolidated total assets were 146,815,407,615 Taka [S1].",
+    "cited": "page 82 | consolidated | balance sheet"
+  },
+  {
+    "id": "sq25-total-equity",
+    "status": "PASS",
+    "answer": "As at 30 June 2025, the consolidated total equity of Square Pharmaceuticals PLC. was 139,955,809,575 Taka [S1].",
+    "cited": "page 82 | consolidated | balance sheet"
+  },
+  {
+    "id": "sq25-nav-per-share",
+    "status": "PASS",
+    "answer": "In 2024–2025, the consolidated Net Assets Value (NAV) per share was Tk. 157.88 [S4]. On a standalone basis, the NAV per share was 124.71 Taka [S6].",
+    "cited": "page 104 | consolidated | notes; page 110 | separate | balance sheet"
+  },
+  {
+    "id": "sq25-trade-payables-2024",
+    "status": "PASS",
+    "answer": "As at 30 June 2024, consolidated trade payables were 1,455,428,272 Taka [S7]. On a standalone basis, trade payables were 686,238,794 Taka [S1].",
+    "cited": "page 125 | separate | notes; page 82 | consolidated | balance sheet"
+  },
+  {
+    "id": "brac24-total-deposits",
+    "status": "PASS",
+    "answer": "At 31 December 2024, the consolidated deposits and other accounts of BRAC Bank PLC. were 777,054,410,607 Taka [S2]. On a standalone basis, deposits and other accounts were 688,620,833,586 Taka [S1].",
+    "cited": "page 218 (left) | balance sheet; page 214 (left) | consolidated | balance sheet"
+  },
+  {
+    "id": "brac24-total-assets",
+    "status": "PASS",
+    "answer": "In 2024, the consolidated total property and assets of BRAC Bank were 1,056,723,501,375 Taka [S3]. On a standalone basis, total property and assets were 930,132,702,781 Taka [S4].",
+    "cited": "page 214 (left) | consolidated | balance sheet; page 218 (left) | balance sheet"
+  },
+  {
+    "id": "brac24-loans-advances",
+    "status": "PASS",
+    "answer": "In 2024, consolidated gross loans and advances were 623,850,781,894 Taka [S1, S6], and consolidated net loans and advances were 602,353,026,969 Taka [S6].",
+    "cited": "page 239 (left) | consolidated; page 238 (right) | consolidated"
+  },
+  {
+    "id": "brac24-offbalance",
+    "status": "PASS",
+    "answer": "In 2024, consolidated total off balance sheet items were 227,240,671,227 Taka [S3].",
+    "cited": "page 214 (right) | consolidated | balance sheet"
+  },
+  {
+    "id": "gp25-total-assets",
+    "status": "PASS",
+    "answer": "As of 31 December 2025, Grameenphone's total assets were 191,322,941 BDT (000) [S1].",
+    "cited": "page 111 | balance sheet"
+  },
+  {
+    "id": "gp25-profit-for-year",
+    "status": "PASS",
+    "answer": "Grameenphone's net profit after tax for the year 2025 was BDT 29,577 million [S4] (also reported as BDT 29.6 billion [S1]).",
+    "cited": "page 97; page 82"
+  },
+  {
+    "id": "gp25-revenue",
+    "status": "PASS",
+    "answer": "Grameenphone reported a total revenue of BDT 158.1 billion for the year 2025 [S2, S3, S4]. In the segment performance breakdown table, total revenue for 2025 is reported as 158,057 in BDT million [S6].",
+    "cited": "page 98; page 97; page 79; page 79"
+  },
+  {
+    "id": "sq24-total-assets",
+    "status": "PASS",
+    "answer": "As at 30 June 2024, Square Pharmaceuticals' consolidated total assets were 132,637,197,060 Taka [S2].",
+    "cited": "page 86 | consolidated | balance sheet"
+  },
+  {
+    "id": "sq24-total-equity",
+    "status": "PASS",
+    "answer": "Square Pharma's consolidated total equity as at 30 June 2024 was 125,921,620,832 Taka [S1].",
+    "cited": "page 86 | consolidated | balance sheet"
+  },
+  {
+    "id": "sq24-nav-per-share",
+    "status": "PASS",
+    "answer": "As of 30 June 2024, the consolidated Net Assets Value (NAV) per Share of Square Pharmaceuticals PLC. was 142.05 Taka [S6]. On a standalone basis, the Net Assets Value (NAV) per Share was 119.35 Taka [S7].",
+    "cited": "page 86 | consolidated | balance sheet; page 114 | separate | balance sheet"
+  },
+  {
+    "id": "sq24-standalone-total-assets",
+    "status": "PASS",
+    "answer": "As at 30 June 2024, Square Pharmaceuticals' standalone total assets were 112,009,914,748 Taka [S1].",
+    "cited": "page 114 | separate | balance sheet"
+  },
+  {
+    "id": "sq25-unanswerable-crypto",
+    "status": "ERROR",
+    "answer": "ERROR: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash, description: Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\\nPlease retry in 11h45m21.425680594s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://aistudio.google.com/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'description': 'Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.', 'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.6-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '42321s'}]}}",
+    "cited": ""
+  },
+  {
+    "id": "sq25-unanswerable-future-year",
+    "status": "PASS",
+    "answer": "Not found in the report.",
+    "cited": ""
+  },
+  {
+    "id": "gp25-unanswerable-kenya",
+    "status": "ERROR",
+    "answer": "ERROR: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash, description: Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\\nPlease retry in 11h43m34.045475813s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://aistudio.google.com/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'description': 'Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.', 'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '42214s'}]}}",
+    "cited": ""
+  },
+  {
+    "id": "brac24-unanswerable-tesla",
+    "status": "ERROR",
+    "answer": "ERROR: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash, description: Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.\\nPlease retry in 11h42m3.717753634s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://aistudio.google.com/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'description': 'Generate content requests per day limit exceeded on Free Tier. See https://aistudio.google.com/docs/rate-limits.', 'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.6-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '42123s'}]}}",
+    "cited": ""
+  }
+]

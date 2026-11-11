@@ -17,9 +17,9 @@ from src.retrieval.search import search
 
 load_dotenv()
 MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
-TOP_K = 6  # chunks passed to the model
+TOP_K = 10  # chunks passed to the model (retrieval reaches 100% at hit@10)
 NOT_FOUND = "Not found in the report."
-RETRY_CODES = {429, 500, 503}  # rate limit / server busy: wait and try again
+RETRY_CODES = {429, 500, 503, 504}  # rate limit / busy / timeout: wait and retry
 MAX_ATTEMPTS = 5
 
 SYSTEM = f"""You answer questions about company annual reports using ONLY the numbered sources provided.
@@ -44,7 +44,7 @@ def get_client() -> genai.Client:
     # we handle retries ourselves below, so the library should not retry silently
     return genai.Client(
         http_options=types.HttpOptions(
-            timeout=60_000, retry_options=types.HttpRetryOptions(attempts=1)
+             timeout=120_000, retry_options=types.HttpRetryOptions(attempts=1)
         )
     )
 

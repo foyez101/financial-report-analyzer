@@ -131,7 +131,10 @@ Google AI Studio:
 ```
 GEMINI_API_KEY=your-key-here
 GEMINI_MODEL=gemini-3.6-flash
+GEMINI_FALLBACK_MODEL=gemini-3.5-flash-lite
 ```
+Each model has its own daily free-tier quota; when the main model's quota is used up,
+answers come from the fallback model.
 
 Check that the key works and see which models respond:
 
@@ -162,6 +165,13 @@ Ask questions:
 python -m src.generation.answer "What were total assets as at 30 June 2025?" --company square-pharma --year 2025
 python -m src.retrieval.search "total deposits" --company brac-bank --year 2024 --mode hybrid
 ```
+Run the web demo:
+
+```powershell
+streamlit run app\streamlit_app.py
+```
+
+The demo refuses to give financial advice: it reports facts from the annual report only.
 
 Evaluate:
 

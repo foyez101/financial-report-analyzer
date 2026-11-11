@@ -6,3 +6,4 @@ chromadb
 rank-bm25
 google-genai
 python-dotenv
+streamlit
